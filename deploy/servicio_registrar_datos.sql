@@ -1,40 +1,41 @@
 CREATE OR REPLACE FUNCTION public.servicio_registrar_datos(
-    nombre_facturacion CHARACTER VARYING,
-    ci_nit CHARACTER VARYING,
-    ciudad CHARACTER VARYING,
-    urbano_rural CHARACTER VARYING,
-    depto CHARACTER VARYING,
-    depto_id INTEGER,
-    depto_descr CHARACTER VARYING,
-    municipio CHARACTER VARYING,
-    municipio_id_depto INTEGER,
-    municipio_descr CHARACTER VARYING,
-    municipio_id_provincia INTEGER,
-    municipio_id_alcaldia INTEGER,
-    municipio_dpa CHARACTER VARYING,
-    dpa CHARACTER VARYING,
-    zonauv CHARACTER VARYING,
-    zonauv_codigo_zona CHARACTER VARYING,
-    zonauv_descr CHARACTER VARYING,
-    zonauv_cod_adm CHARACTER VARYING,
-    marker CHARACTER VARYING,
-    marker_id INTEGER,
-    marker_position CHARACTER VARYING,
-    marker_lat CHARACTER VARYING,
-    marker_long CHARACTER VARYING,
-    marker_visible CHARACTER VARYING,
-    marker_visible2 CHARACTER VARYING,
-    marker_drag CHARACTER VARYING,
-    zona_barrio_uv_otro CHARACTER VARYING,
-    calle_avenida CHARACTER VARYING,
-    dir_referencial CHARACTER VARYING,
-    numero CHARACTER VARYING,
-    edificio CHARACTER VARYING,
-    piso CHARACTER VARYING,
-    departamento_local_oficina CHARACTER VARYING,
-    longitud CHARACTER VARYING,
-    latitud CHARACTER VARYING,
-    usuario INTEGER
+    _i_nombre_facturacion CHARACTER VARYING,
+    _i_ci_nit CHARACTER VARYING,
+    _i_ciudad CHARACTER VARYING,
+    _i_urbano_rural CHARACTER VARYING,
+    _i_depto CHARACTER VARYING,
+    _i_depto_id INTEGER,
+    _i_depto_descr CHARACTER VARYING,
+    _i_municipio CHARACTER VARYING,
+    _i_municipio_id_depto INTEGER,
+    _i_municipio_descr CHARACTER VARYING,
+    _i_municipio_id_provincia INTEGER,
+    _i_municipio_id_alcaldia INTEGER,
+    _i_municipio_dpa CHARACTER VARYING,
+    _i_dpa CHARACTER VARYING,
+    _i_zonauv CHARACTER VARYING,
+    _i_zonauv_codigo_zona CHARACTER VARYING,
+    _i_zonauv_descr CHARACTER VARYING,
+    _i_zonauv_cod_adm CHARACTER VARYING,
+    _i_marker CHARACTER VARYING,
+    _i_marker_id INTEGER,
+    _i_marker_position CHARACTER VARYING,
+    _i_marker_lat CHARACTER VARYING,
+    _i_marker_long CHARACTER VARYING,
+    _i_marker_visible CHARACTER VARYING,
+    _i_marker_visible2 CHARACTER VARYING,
+    _i_marker_drag CHARACTER VARYING,
+    _i_zona_barrio_uv_otro CHARACTER VARYING,
+    _i_calle_avenida CHARACTER VARYING,
+    _i_dir_referencial CHARACTER VARYING,
+    _i_numero CHARACTER VARYING,
+    _i_edificio CHARACTER VARYING,
+    _i_piso CHARACTER VARYING,
+    _i_departamento_local_oficina CHARACTER VARYING,
+    _i_longitud CHARACTER VARYING,
+    _i_latitud CHARACTER VARYING,
+    _i_usuario INTEGER,
+    _i_zona_codigo_zona_completo CHARACTER VARYING
 )
 RETURNS response AS
 $BODY$
@@ -50,7 +51,7 @@ DECLARE
     departamento_pk INTEGER;
     provincia_pk INTEGER;
     alcaldia_pk INTEGER;
-    muncipio_pk INTEGER;
+    municipio_pk INTEGER;
     zona_pk INTEGER;
     marker_pk INTEGER;
     servicio_pk INTEGER;
@@ -93,19 +94,19 @@ BEGIN
 
     IF (SELECT COUNT(*) FROM direccion_zona WHERE zonauv_codigo_zona=$16)=0 THEN
         INSERT INTO direccion_zona(usuario_creacion, fecha_creacion, zonauv, zonauv_codigo_zona_completo, zonauv_codigo_zona, zonauv_descr, zonauv_cod_adm, municipio_id)
-        VALUES($36, CURRENT_TIMESTAMP, $15, $16, $16, $17, $18, municipio_pk)
+        VALUES($36, CURRENT_TIMESTAMP, $15, $37, $16, $17, $18, municipio_pk)
         RETURNING id INTO zona_pk;
     ELSE
         SELECT id FROM direccion_zona WHERE zonauv_codigo_zona=$16
         INTO zona_pk;
     END IF;
 
-    IF (SELECT COUNT(*) FROM direccion_marker WHERE marker_id=$20)=0 THEN
+    IF (SELECT COUNT(*) FROM direccion_marker WHERE marker_id=$20::CHARACTER VARYING)=0 THEN
         INSERT INTO direccion_marker(usuario_creacion, fecha_creacion, marker, marker_id, marker_position, marker_lat, marker_long, marker_visible, marker_visible2, marker_drag, zona_id)
-        VALUES($36, CURRENT_TIMESTAMP, $19, $20, $21, $22, $23, $24, $25, $26, zona_pk)
+        VALUES($36, CURRENT_TIMESTAMP, $19, $20::CHARACTER VARYING, $21, $22, $23, $24, $25, $26, zona_pk)
         RETURNING id INTO marker_pk;
     ELSE
-        SELECT id FROM direccion_marker WHERE marker_id=$20
+        SELECT id FROM direccion_marker WHERE marker_id=$20::CHARACTER VARYING
         INTO marker_pk;
     END IF;
 

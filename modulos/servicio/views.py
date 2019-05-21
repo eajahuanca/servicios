@@ -87,8 +87,7 @@ class ServicioModelViewSet(viewsets.ViewSet):
                     latitud = request.data['ubicacion']['latitud']
                     usuario = Token.objects.filter(key=token).first()
                     usuario_id = usuario.user_id
-        
-                    
+
                     data = DataBaseProcedure('servicio_registrar_datos') \
                         .add_parameter(nombre_facturacion, PgParameter.PG_CHAR) \
                         .add_parameter(ci_nit, PgParameter.PG_CHAR) \
@@ -101,16 +100,15 @@ class ServicioModelViewSet(viewsets.ViewSet):
                         .add_parameter(int(municipio_id_depto), PgParameter.PG_INT) \
                         .add_parameter(municipio_descr, PgParameter.PG_CHAR) \
                         .add_parameter(int(municipio_id_provincia), PgParameter.PG_INT) \
-                        .add_parameter(int(municipio_id_alcaldia), PgParameter.PG_CHAR) \
+                        .add_parameter(int(municipio_id_alcaldia), PgParameter.PG_INT) \
                         .add_parameter(municipio_dpa, PgParameter.PG_CHAR) \
                         .add_parameter(dpa, PgParameter.PG_CHAR) \
                         .add_parameter(zonauv, PgParameter.PG_CHAR) \
-                        .add_parameter(zonauv_codigo_zona_completo, PgParameter.PG_CHAR) \
                         .add_parameter(zonauv_codigo_zona, PgParameter.PG_CHAR) \
                         .add_parameter(zonauv_descr, PgParameter.PG_CHAR) \
                         .add_parameter(zonauv_cod_adm, PgParameter.PG_CHAR) \
                         .add_parameter(marker, PgParameter.PG_CHAR) \
-                        .add_parameter(int(marker_id), PgParameter.PG_CHAR) \
+                        .add_parameter(int(marker_id), PgParameter.PG_INT) \
                         .add_parameter(marker_position, PgParameter.PG_CHAR) \
                         .add_parameter(marker_lat, PgParameter.PG_CHAR) \
                         .add_parameter(marker_long, PgParameter.PG_CHAR) \
@@ -126,7 +124,8 @@ class ServicioModelViewSet(viewsets.ViewSet):
                         .add_parameter(departamento_local_oficina, PgParameter.PG_CHAR) \
                         .add_parameter(longitud, PgParameter.PG_CHAR) \
                         .add_parameter(latitud, PgParameter.PG_CHAR) \
-                        .add_parameter(usuario_id, PgParameter.PG_INT)
+                        .add_parameter(usuario_id, PgParameter.PG_INT) \
+                        .add_parameter(zonauv_codigo_zona_completo, PgParameter.PG_CHAR)
 
                     return data.get_message().get_response()
                     #return SuccessRestResponse(
@@ -138,9 +137,9 @@ class ServicioModelViewSet(viewsets.ViewSet):
                         message='Token no valido',
                         status=status.HTTP_400_BAD_REQUEST
                     )
-            except:    
+            except Exception as ex:    
                 return ErrorRestResponse(
-                    message='Token no valido',
+                    message='Ocurrio el siguiente error: %s' % ex,
                     status=status.HTTP_400_BAD_REQUEST
                 )
         else:
